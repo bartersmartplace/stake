@@ -1,0 +1,28 @@
+services:
+  barter-website_be-express_db:
+    image: postgres:latest
+    env_file: .env
+    volumes:
+      - barter-be-postgres-data:/var/lib/postgresql
+
+  barter-website_be-express_api:
+    image: barter-website_be-express:latest
+    env_file: .env
+    restart: always
+    command: npm run api
+    depends_on:
+      - barter-website_be-express_db
+    ports:
+      - 8000:8000
+
+  barter-website_be-express_stakes:
+    image: barter-website_be-express:latest
+    env_file: .env
+    restart: always
+    command: npm run stakes
+    depends_on:
+      - barter-website_be-express_db
+
+volumes:
+  barter-be-postgres-data:
+    external: true
